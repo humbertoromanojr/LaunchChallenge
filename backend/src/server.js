@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const databaseConfig = require('./config/database')
 
 class App {
   constructor () {
@@ -9,6 +10,19 @@ class App {
     this.database()
     this.middlewares()
     this.routes()
+  }
+
+  database () {
+    /**
+     * Config mongodb Atlas
+     *
+     * mongodb://usuario:senha@localhost:27017/nomedatabase
+     */
+
+    mongoose.connect(databaseConfig.uri, {
+      useCreateIndex: true,
+      useNewUrlParser: true
+    })
   }
 
   middlewares () {
