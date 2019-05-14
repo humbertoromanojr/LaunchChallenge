@@ -1,0 +1,2 @@
+=== bd dados, use docker
+sudo docker run --name mongonodelaunch -p 27017:27017 -d -t mongo
