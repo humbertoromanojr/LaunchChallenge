@@ -1,13 +1,9 @@
 const User = require('../models/User')
 
 class UserController {
-  async index (req, res) {
+  async index (req, res) {}
 
-  }
-
-  async show (req, res) {
-
-  }
+  async show (req, res) {}
 
   async store (req, res) {
     const { email } = req.body
@@ -21,13 +17,9 @@ class UserController {
     return res.json(user)
   }
 
-  async update (req, res) {
+  async update (req, res) {}
 
-  }
-
-  async destroy (req, res) {
-
-  }
+  async destroy (req, res) {}
 }
 
 module.exports = new UserController()
