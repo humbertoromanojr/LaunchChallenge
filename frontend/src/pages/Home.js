@@ -2,10 +2,13 @@ import React, { Component } from "react";
 
 import axios from "axios";
 
+const baseUrl = "http://localhost:3003";
+
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      _id: "",
       items: "",
       isLoaded: false
     };
@@ -13,7 +16,7 @@ class Home extends Component {
 
   componentDidMount() {
     axios
-      .get("http://localhost:3003/users", {})
+      .get(`${baseUrl}/users`, {})
       .then(res => {
         this.setState({ items: res.data, isLoaded: true });
       })
@@ -21,6 +24,16 @@ class Home extends Component {
       .catch(error => {
         console.log("Não encontrada a API!");
       });
+  }
+
+  handleDelete() {
+    try {
+      axios
+        .delete(`${baseUrl}/users/${this.item._id}`)
+        .then(res => console.log(res.data));
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
@@ -41,7 +54,13 @@ class Home extends Component {
               <div key={item._id}>
                 <strong>{item.name}</strong>
                 <button className="button muted-button">Edit</button>
-                <button className="button muted-button">Delete</button>
+                <button
+                  onClick={this.handleDelete}
+                  className="button muted-button"
+                  value={item._id}
+                >
+                  Delete
+                </button>
               </div>
             ))}
           </div>

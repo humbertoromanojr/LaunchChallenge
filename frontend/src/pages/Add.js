@@ -35,33 +35,23 @@ class Add extends Component {
     });
   };
 
-  handleSubmit(data) {
-    data.preventDefault();
+  handleSubmit = async data => {
+    try {
+      const { name, email, password, address } = this.state;
 
-    const users = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      address: this.state.address
-    };
+      const users = {
+        name,
+        email,
+        password,
+        address
+      };
 
-    console.log(this.state);
-
-    axios.post(`${baseUrl}/users`, users).then(res => {
-      this.setState({
-        users: res.data,
-        error: false,
-        isSubmited: true
-      }).catch(error => {
-        this.setState({
-          error: true,
-          isSubmited: false
-        });
-      });
-    });
-
-    console.log(users);
-  }
+      const response = await axios.post(`${baseUrl}/users`, users);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   /* handleReset = () => {
     this.setState({
