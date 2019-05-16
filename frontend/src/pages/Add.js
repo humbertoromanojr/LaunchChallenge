@@ -18,7 +18,10 @@ const schema = Yup.object().shape({
 
 class Add extends Component {
   state = {
-    users: [],
+    name: "",
+    email: "",
+    password: "",
+    address: "",
     isSubmited: false,
     error: false
   };
@@ -33,18 +36,18 @@ class Add extends Component {
   };
 
   handleSubmit(data) {
-    console.log(data);
-
     data.preventDefault();
 
-    const addUser = {
+    const users = {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
       address: this.state.address
     };
 
-    axios.post(`${baseUrl}/users`, addUser).then(res => {
+    console.log(this.state);
+
+    axios.post(`${baseUrl}/users`, users).then(res => {
       this.setState({
         users: res.data,
         error: false,
@@ -57,7 +60,7 @@ class Add extends Component {
       });
     });
 
-    console.log(addUser);
+    console.log(users);
   }
 
   /* handleReset = () => {
