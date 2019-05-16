@@ -1,47 +1,110 @@
-import React from "react";
+import React, { Component } from "react";
 import { Form, Input } from "@rocketseat/unform";
-
+import * as Yup from "yup";
 import axios from "axios";
 
-function Add() {
-  function handleSubmit(data) {
-    data.preventDefault();
+const baseUrl = "http://localhost:3003";
 
+const schema = Yup.object().shape({
+  name: Yup.string(),
+  email: Yup.string()
+    .email("Custom invalid email")
+    .required("Custom required"),
+  password: Yup.string()
+    .min(4)
+    .required(),
+  address: Yup.string()
+});
+
+class Add extends Component {
+  state = {
+    users: [],
+    isSubmited: false,
+    error: false
+  };
+
+  handleInputChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+      [e.target.email]: e.target.value,
+      [e.target.password]: e.target.value,
+      [e.target.address]: e.target.value
+    });
+  };
+
+  handleSubmit(data) {
     console.log(data);
 
-    this.setState({
-      items: [
-        ...this.state.items,
-        {
-          name: data.target.name.value,
-          email: data.target.email.value,
-          password: data.target.password.value,
-          address: data.target.address.value
-        }
-      ]
+    data.preventDefault();
+
+    const addUser = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      address: this.state.address
+    };
+
+    axios.post(`${baseUrl}/users`, addUser).then(res => {
+      this.setState({
+        users: res.data,
+        error: false,
+        isSubmited: true
+      }).catch(error => {
+        this.setState({
+          error: true,
+          isSubmited: false
+        });
+      });
     });
 
-    axios
-      .post("http://localhost:3003/users")
-      .then(res => console.log(res.data));
-
-    data.target.name.value = "";
-    data.target.email.value = "";
-    data.target.password.value = "";
-    data.target.address.value = "";
+    console.log(addUser);
   }
 
-  return (
-    <div>
-      <Form onSubmit={handleSubmit} method="post">
-        <Input type="text" name="name" placeholder="Nome: " />
-        <Input type="email" name="email" placeholder="Email válido: " />
-        <Input type="password" name="password" placeholder="Senha: " />
-        <Input type="text" name="address" placeholder="Endereço completo: " />
+  /* handleReset = () => {
+    this.setState({
+      name: "",
+      email: "",
+      password: "",
+      address: ""
+    });
+  }; */
+
+  render() {
+    return (
+      <Form schema={schema} onSubmit={this.handleSubmit} method="post">
+        <Input
+          type="text"
+          name="name"
+          onChange={this.handleInputChange}
+          value={this.state.name}
+          placeholder="Nome: "
+        />
+        <Input
+          type="email"
+          name="email"
+          onChange={this.handleInputChange}
+          value={this.state.email}
+          placeholder="Email válido: "
+        />
+        <Input
+          type="password"
+          name="password"
+          onChange={this.handleInputChange}
+          value={this.state.password}
+          placeholder="Senha: "
+        />
+        <Input
+          type="text"
+          name="address"
+          onChange={this.handleInputChange}
+          value={this.state.address}
+          placeholder="Endereço completo: "
+        />
         <button type="submit">Add</button>
+        {/* <button onClick={this.handleReset}>Reset</button> */}
       </Form>
-    </div>
-  );
+    );
+  }
 }
 
 export default Add;
