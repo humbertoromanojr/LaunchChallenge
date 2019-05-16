@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
 
 import axios from "axios";
 
-class App extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,6 +40,8 @@ class App extends Component {
             {items.map(item => (
               <div key={item._id}>
                 <strong>{item.name}</strong>
+                <button className="button muted-button">Edit</button>
+                <button className="button muted-button">Delete</button>
               </div>
             ))}
           </div>
@@ -50,4 +51,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Home;

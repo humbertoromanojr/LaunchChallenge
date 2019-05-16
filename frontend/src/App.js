@@ -1,55 +1,37 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import Routes from "./routes";
+import Home from "./pages/Home";
+import Add from "./pages/Add";
 
-import axios from "axios";
+function App() {
+  return (
+    <Router>
+      <div>
+        <Header />
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: "",
-      isLoaded: false
-    };
-  }
+        <Route exact path="/" component={Home} />
+        <Route path="/add" component={Add} />
+      </div>
+    </Router>
+  );
+}
 
-  componentDidMount() {
-    axios
-      .get("http://localhost:3003/users", {})
-      .then(res => {
-        this.setState({ items: res.data, isLoaded: true });
-      })
-
-      .catch(error => {
-        console.log("Não encontrada a API!");
-      });
-  }
-
-  render() {
-    const { isLoaded, items } = this.state;
-    console.log(items);
-
-    if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (
-        <div>
-          <header>
-            <h1>Listagem de usuários</h1>
-          </header>
-
-          <div>
-            {items.map(item => (
-              <div key={item._id}>
-                <strong>{item.name}</strong>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-    }
-  }
+function Header() {
+  return (
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="collpase navbar-collpase" id="navbar">
+        <ul className="navbar-nav">
+          <li className="nav-link">
+            <Link to="/">Home</Link>
+          </li>
+          <li className="nav-link">
+            <Link to="/add">Add</Link>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
 }
 
 export default App;
