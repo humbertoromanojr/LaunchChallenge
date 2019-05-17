@@ -1,19 +1,24 @@
 import React from "react";
+import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+import store from "./store";
 
 import Home from "./pages/Home";
 import Add from "./pages/Add";
 
 function App() {
   return (
-    <Router>
-      <div>
-        <Header />
+    <Provider store={store}>
+      <Router>
+        <div>
+          <Header />
 
-        <Route exact path="/" component={Home} />
-        <Route path="/add" component={Add} />
-      </div>
-    </Router>
+          <Route exact path="/" component={Home} />
+          <Route path="/add" component={Add} />
+        </div>
+      </Router>
+    </Provider>
   );
 }
 
