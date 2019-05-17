@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Form, Input } from "@rocketseat/unform";
 import axios from "axios";
 
 const baseUrl = "http://localhost:3003";
@@ -8,8 +7,8 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      _id: "",
-      items: "",
+      _id: 0,
+      items: [],
       isLoaded: false
     };
   }
@@ -30,16 +29,28 @@ class Home extends Component {
     this.setState({ _id: e.target.value });
   };
 
-  handleDelete(e) {
-    e.preventDefault();
-    axios
-      .delete(`${baseUrl}/users/${this.state._id}`)
-      .then(res => console.log(res.data));
-  }
+  handleDelete = async _id => {
+    try {
+      let items = this.state.items;
+      items.splice(_id, 1);
+
+      this.setState({
+        items: items
+      });
+
+      const response = await axios
+        .delete(`${baseUrl}/users/${this.state._id}`)
+        .then(res => {
+          console.log(response);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   render() {
     const { isLoaded, items } = this.state;
-    console.log(this.state);
+    console.log(items);
     if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
@@ -50,20 +61,15 @@ class Home extends Component {
           </header>
 
           <div>
-            {items.map(item => (
-              <div key={item._id}>
-                <strong>{item.name}</strong>
+            {items.map((item, _id) => (
+              <div key={_id}>
+                <strong>
+                  <a href="http://localhost:3000/edit">{item.name}</a>
+                </strong>
                 <button className="button muted-button">Edit</button>
-                <Form onSubmit={this.handleDelete}>
-                  User ID:{" "}
-                  <Input
-                    type="text"
-                    name="_id"
-                    onChange={this.handleChange}
-                    placeholder={item._id}
-                  />
-                  <button type="submit">Delete</button>
-                </Form>
+                <button type="submit" onClick={() => this.handleDelete(_id)}>
+                  Delete
+                </button>
               </div>
             ))}
           </div>
