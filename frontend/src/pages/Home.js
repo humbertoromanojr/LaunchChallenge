@@ -27,13 +27,35 @@ class Home extends Component {
   }
 
   handleChange = e => {
-    this.setState({ _id: e.target.value });
+    this.setState({ 
+      _id: e.target.value,
+      name: e.target.value,
+      email: e.target.value,
+      password: e.target.value,
+      address: e.target.value
+    });
   };
 
-  handleUpdate = ()=> {
+  handleUpdate = ( data, _id ) => {
    
+    try {
+      
+      const items = { 
+        name: this.state.name, 
+        email: this.state.email, 
+        password: this.state.password, 
+        address: this.state.address 
+      }
+
+      axios.put(`${baseUrl}/users/${this.state._id}`, items);
+      console.log(items);
+    } catch (err) {
+      console.log(err);
+    }
+
   };
 
+  
   handleDelete = async _id => {
     try {
       let items = this.state.items;
@@ -56,10 +78,7 @@ class Home extends Component {
   render() {
     const { isLoaded, items } = this.state;
     console.log(items);
-
-    const dadosapi = `${baseUrl}/users/${this.state.items._id}`
-      console.log(dadosapi)
-    
+ 
     if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
@@ -73,22 +92,28 @@ class Home extends Component {
             {items.map((item, _id) => (
               <div key={_id}>
                 <strong>
-                  <a href="http://localhost:3000/edit">{item.name}</a>
+                  {item.name} - {item.email} - {item.address}
                 </strong>
-                <button
-                  onClick={this.handleUpdate}
-                  onChange={this.handleChange}
-                  className="button muted-button"
-                >
+
+                <Form onSubmit={this.handleUpdate}>
+                
+                <Input type="text" name="name" placeholder={item.name}/>
+                <Input type="email" name="email" value={this.state.email} placeholder={item.email} />
+                <Input type="password" name="password" placeholder="Senha: " />
+                <Input type="text" name="address" placeholder={item.address} />
+                <button onClick={()=>this.handleUpdate(_id)} className="button muted-button">
                   Edit
                 </button>
-                <Form >
+                </Form>
+
+
+                <Form onSubmit={this.handleDelete}>
                   
                   <Input type="text" name="_id" onChange={this.handleChange} />
                    <button 
                    className="button muted-button"
                    
-                  onClick={() => this.handleDelete(item._id)}
+                  onClick={()=>this.handleDelete(_id)}
                 >
                   Delete
                 </button> Cole ID: {item._id}
