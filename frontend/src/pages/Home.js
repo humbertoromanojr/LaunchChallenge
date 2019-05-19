@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Form, Input } from "@rocketseat/unform";
 import axios from "axios";
 
 const baseUrl = "http://localhost:3003";
@@ -7,8 +8,8 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      _id: 0,
       items: [],
+      index: '',
       isLoaded: false
     };
   }
@@ -27,6 +28,10 @@ class Home extends Component {
 
   handleChange = e => {
     this.setState({ _id: e.target.value });
+  };
+
+  handleUpdate = ()=> {
+   
   };
 
   handleDelete = async _id => {
@@ -51,6 +56,10 @@ class Home extends Component {
   render() {
     const { isLoaded, items } = this.state;
     console.log(items);
+
+    const dadosapi = `${baseUrl}/users/${this.state.items._id}`
+      console.log(dadosapi)
+    
     if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
@@ -66,10 +75,24 @@ class Home extends Component {
                 <strong>
                   <a href="http://localhost:3000/edit">{item.name}</a>
                 </strong>
-                <button className="button muted-button">Edit</button>
-                <button type="submit" onClick={() => this.handleDelete(_id)}>
+                <button
+                  onClick={this.handleUpdate}
+                  onChange={this.handleChange}
+                  className="button muted-button"
+                >
+                  Edit
+                </button>
+                <Form >
+                  ID: {item._id}
+                  <Input type="text" name="_id" onChange={this.handleChange} />
+                   <button 
+                   className="button muted-button"
+                  onClick={() => this.handleDelete(_id)}
+                >
                   Delete
                 </button>
+                </Form>
+                
               </div>
             ))}
           </div>
