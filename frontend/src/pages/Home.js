@@ -83,14 +83,15 @@ class Home extends Component {
                   Edit
                 </button>
                 <Form >
-                  ID: {item._id}
+                  
                   <Input type="text" name="_id" onChange={this.handleChange} />
                    <button 
                    className="button muted-button"
-                  onClick={() => this.handleDelete(_id)}
+                   
+                  onClick={() => this.handleDelete(item._id)}
                 >
                   Delete
-                </button>
+                </button> Cole ID: {item._id}
                 </Form>
                 
               </div>
